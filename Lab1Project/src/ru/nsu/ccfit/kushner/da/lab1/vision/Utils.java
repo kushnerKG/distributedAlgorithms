@@ -5,16 +5,12 @@ import com.google.api.services.vision.v1.Vision;
 import com.google.api.services.vision.v1.VisionScopes;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 
-
-
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.vision.v1.model.*;
 import com.google.common.collect.ImmutableList;
 
-
 import java.io.IOException;
-import java.io.PrintStream;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
@@ -24,10 +20,9 @@ import java.util.List;
 public class Utils {
 
     private static final String APPLICATION_NAME = "Lab1/1.0";
-    private static final int MAX_RESULTS = 1;
-    /**
-     * Connects to the Vision API using Application Default Credentials.
-     */
+    private static final int MAX_RESULTS = 6;
+    private static final String TEXT_DETECTION_IDENTIFIER = "TEXT_DETECTION";
+
     public static Vision getVisionService() throws IOException, GeneralSecurityException {
         GoogleCredential credential =
                 GoogleCredential.getApplicationDefault().createScoped(VisionScopes.all());
@@ -37,23 +32,15 @@ public class Utils {
                 .build();
     }
 
-
     public static Vision.Images.Annotate constructRequest(byte[] data, Vision vision) throws IOException {
-        //byte[] data = Files.readAllBytes(path);
 
         AnnotateImageRequest request =
-                new AnnotateImageRequest()
-                        .setImage(new Image().encodeContent(data))
-                        .setFeatures(ImmutableList.of(
-                                new Feature()
-                                        .setType("TEXT_DETECTION").setMaxResults(MAX_RESULTS)));
+                new AnnotateImageRequest().setImage(new Image().encodeContent(data))
+                        .setFeatures(ImmutableList.of(new Feature()
+                                .setType(TEXT_DETECTION_IDENTIFIER).setMaxResults(MAX_RESULTS)));
 
-        return vision.images()
-                        .annotate(new BatchAnnotateImagesRequest().setRequests(ImmutableList.of(request)));
+        return vision.images().annotate(new BatchAnnotateImagesRequest().setRequests(ImmutableList.of(request)));
     }
-
-
-    //Parsing the Response
 
     public static List<EntityAnnotation> parsingResponse(Vision.Images.Annotate annotate) throws IOException {
         BatchAnnotateImagesResponse batchResponse = annotate.execute();
@@ -63,17 +50,14 @@ public class Utils {
         return response.getTextAnnotations();
     }
 
-    public static void printLabels(PrintStream out, List<EntityAnnotation> labels) {
+    public static String responseText(List<EntityAnnotation> res){
 
-        for (EntityAnnotation label : labels) {
-            out.printf(
-                    "\t%s (score: %.3f)\n",
-                    label.getDescription(),
-                    label.getScore());
+        StringBuilder stringBuilder = new StringBuilder();
+        for (EntityAnnotation label : res) {
+            stringBuilder.append(label.getDescription()).append("<br />");
         }
-        if (labels.isEmpty()) {
-            out.println("\tNo labels found.");
-        }
+
+        return stringBuilder.toString();
     }
 
 }
