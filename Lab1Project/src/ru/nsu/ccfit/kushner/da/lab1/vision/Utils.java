@@ -24,7 +24,7 @@ import java.util.List;
 public class Utils {
 
     private static final String APPLICATION_NAME = "Lab1/1.0";
-    private static final int MAX_RESULTS = 6;
+    private static final int MAX_RESULTS = 1;
     /**
      * Connects to the Vision API using Application Default Credentials.
      */
@@ -38,7 +38,7 @@ public class Utils {
     }
 
 
-    public static void constructRequest(byte[] data, Vision vision) throws IOException {
+    public static Vision.Images.Annotate constructRequest(byte[] data, Vision vision) throws IOException {
         //byte[] data = Files.readAllBytes(path);
 
         AnnotateImageRequest request =
@@ -48,28 +48,19 @@ public class Utils {
                                 new Feature()
                                         .setType("TEXT_DETECTION").setMaxResults(MAX_RESULTS)));
 
-        Vision.Images.Annotate annotate =
-                vision.images()
+        return vision.images()
                         .annotate(new BatchAnnotateImagesRequest().setRequests(ImmutableList.of(request)));
-        // Due to a bug: requests to Vision API containing large images fail when GZipped.
-        //annotate.setDisableGZipContent(true);
     }
 
 
     //Parsing the Response
 
-    public static List<EntityAnnotation> ParsingResponse(Vision.Images.Annotate annotate) throws IOException {
+    public static List<EntityAnnotation> parsingResponse(Vision.Images.Annotate annotate) throws IOException {
         BatchAnnotateImagesResponse batchResponse = annotate.execute();
         assert batchResponse.getResponses().size() == 1;
         AnnotateImageResponse response = batchResponse.getResponses().get(0);
 
-        if (response.getTextAnnotations() == null) {
-            throw new IOException(
-                    response.getError() != null
-                            ? response.getError().getMessage()
-                            : "Unknown error getting image annotations");
-        }
-        return response.getLabelAnnotations();
+        return response.getTextAnnotations();
     }
 
     public static void printLabels(PrintStream out, List<EntityAnnotation> labels) {

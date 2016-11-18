@@ -1,6 +1,7 @@
 package ru.nsu.ccfit.kushner.da.lab1;
 
 import com.google.api.services.vision.v1.Vision;
+import com.google.api.services.vision.v1.model.EntityAnnotation;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
@@ -15,6 +16,7 @@ import javax.servlet.http.Part;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
+import java.util.List;
 
 /**
  * Created by konstantin on 11.11.16.
@@ -78,18 +80,34 @@ public class UploadServlet extends HttpServlet {
 //
 //                String filePath = uploadPath + File.separator + fileName.substring(0, fileName.lastIndexOf(".")) + ".txt";
 //                File storeFile = new File(filePath);
-//
 //                FileOutputStream fos = new FileOutputStream(storeFile);
+
+
                 String sCert = javax.xml.bind.DatatypeConverter.printBase64Binary(data);
 
                 Vision vision = Utils.getVisionService();
+                Vision.Images.Annotate annotate = Utils.constructRequest(data, vision);
+
+                List<EntityAnnotation> res = Utils.parsingResponse(annotate);
+
+                Utils.printLabels(System.out, res);
+
+                String str = "";
+                for (EntityAnnotation label : res) {
+                    str += label.getDescription() + " " + label.getScore();
+//                    out.printf(
+//                            "\t%s (score: %.3f)\n",
+//                            label.getDescription(),
+//                            label.getScore());
+                }
+
                 //printLabels(System.out, imagePath, app.labelImage(imagePath, MAX_LABELS));
 
 
                 //fos.write(sCert.getBytes());
 
 
-                request.setAttribute("message", data.length);
+                request.setAttribute("message", str);
 
                 getServletContext().getRequestDispatcher("/uploadPage.jsp").forward(
                         request, response);
