@@ -1,12 +1,11 @@
-package ru.nsu.ccfit.kushner.da.lab1.vision;
+package vision;
 
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.services.vision.v1.Vision;
-import com.google.api.services.vision.v1.VisionScopes;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.services.vision.v1.Vision;
+import com.google.api.services.vision.v1.VisionScopes;
 import com.google.api.services.vision.v1.model.*;
 import com.google.common.collect.ImmutableList;
 
@@ -15,7 +14,7 @@ import java.security.GeneralSecurityException;
 import java.util.List;
 
 /**
- * Created by konstantin on 18.11.16.
+ * Created by konstantin on 25.11.16.
  */
 public class Utils {
 
@@ -24,8 +23,8 @@ public class Utils {
     private static final String TEXT_DETECTION_IDENTIFIER = "TEXT_DETECTION";
 
     public static Vision getVisionService() throws IOException, GeneralSecurityException {
-        GoogleCredential credential =
-                GoogleCredential.getApplicationDefault().createScoped(VisionScopes.all());
+        GoogleCredential credential;
+        credential = GoogleCredential.getApplicationDefault().createScoped(VisionScopes.all());
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
         return new Vision.Builder(GoogleNetHttpTransport.newTrustedTransport(), jsonFactory, credential)
                 .setApplicationName(APPLICATION_NAME)
@@ -59,5 +58,4 @@ public class Utils {
 
         return stringBuilder.toString();
     }
-
 }

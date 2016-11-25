@@ -1,26 +1,23 @@
-package ru.nsu.ccfit.kushner.da.lab1;
-
 import com.google.api.services.vision.v1.Vision;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import ru.nsu.ccfit.kushner.da.lab1.vision.Utils;
+import vision.Utils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.GeneralSecurityException;
 
 /**
- * Created by konstantin on 11.11.16.
+ * Created by konstantin on 25.11.16.
  */
-
 public class UploadServlet extends HttpServlet {
-
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
 
@@ -63,3 +60,4 @@ public class UploadServlet extends HttpServlet {
         }
     }
 }
+

@@ -5,13 +5,13 @@
          version="3.0">
     <servlet>
         <servlet-name>hello</servlet-name>
-        <servlet-class>ru.nsu.ccfit.kushner.da.lab1.MainServlet</servlet-class>
+        <servlet-class>MainServlet</servlet-class>
     </servlet>
 
 
     <servlet>
         <servlet-name>imageUpload</servlet-name>
-        <servlet-class>ru.nsu.ccfit.kushner.da.lab1.UploadServlet</servlet-class>
+        <servlet-class>UploadServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

@@ -1,5 +1,3 @@
-package ru.nsu.ccfit.kushner.da.lab1;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -7,7 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created by konstantin on 11.11.16.
+ * Created by konstantin on 25.11.16.
  */
 public class MainServlet extends HttpServlet {
 
